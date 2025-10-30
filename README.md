@@ -114,7 +114,7 @@ cd signalist_stock-tracker-app
 
 **Installation**
 
-Install the project dependencies using npm:
+Install the project dependencies using npm :
 
 ```bash
 npm install
