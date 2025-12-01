@@ -8,11 +8,11 @@ import Link from "next/link";
 import {searchStocks} from "@/lib/actions/finnhub.actions";
 import {useDebounce} from "@/hooks/useDebounce";
 
-export default function SearchCommand({ renderAs = 'button', label = 'Add stock', initialStocks }: SearchCommandProps) {
+export default function SearchCommand({ renderAs = 'button', buttonLabel = 'Search' }: SearchCommandProps) {
   const [open, setOpen] = useState(false)
   const [searchTerm, setSearchTerm] = useState("")
   const [loading, setLoading] = useState(false)
-  const [stocks, setStocks] = useState<StockWithWatchlistStatus[]>(initialStocks);
+  const [stocks, setStocks] = useState<StockWithWatchlistStatus[]>([]);
 
   const isSearchMode = !!searchTerm.trim();
   const displayStocks = isSearchMode ? stocks : stocks?.slice(0, 10);
@@ -29,7 +29,7 @@ export default function SearchCommand({ renderAs = 'button', label = 'Add stock'
   }, [])
 
   const handleSearch = async () => {
-    if(!isSearchMode) return setStocks(initialStocks);
+    if(!isSearchMode) return setStocks([]);
 
     setLoading(true)
     try {
@@ -51,18 +51,18 @@ export default function SearchCommand({ renderAs = 'button', label = 'Add stock'
   const handleSelectStock = () => {
     setOpen(false);
     setSearchTerm("");
-    setStocks(initialStocks);
+    setStocks([]);
   }
 
   return (
     <>
       {renderAs === 'text' ? (
           <span onClick={() => setOpen(true)} className="search-text">
-            {label}
+            {buttonLabel}
           </span>
       ): (
           <Button onClick={() => setOpen(true)} className="search-btn">
-            {label}
+            {buttonLabel}
           </Button>
       )}
       <CommandDialog open={open} onOpenChange={setOpen} className="search-dialog">
