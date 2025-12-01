@@ -16,12 +16,31 @@ if(!cached) {
 }
 
 export const connectToDatabase = async () => {
-    if(!MONGODB_URI) throw new Error('MONGODB_URI must be set within .env');
+    if(!MONGODB_URI) {
+        throw new Error(
+            'Missing MONGODB_URI environment variable. Please set it in your .env.local file. ' +
+            'Format: mongodb+srv://username:password@cluster.mongodb.net/dbname'
+        );
+    }
 
     if(cached.conn) return cached.conn;
 
     if(!cached.promise) {
-        cached.promise = mongoose.connect(MONGODB_URI, { bufferCommands: false });
+        cached.promise = mongoose.connect(MONGODB_URI, { bufferCommands: false })
+            .then((mongoose) => {
+                console.log(`✅ MongoDB connected (${process.env.NODE_ENV})`);
+                return mongoose;
+            })
+            .catch((err) => {
+                console.error('❌ MongoDB connection failed:', err.message);
+                throw new Error(
+                    `Failed to connect to MongoDB:\n` +
+                    `• Check MONGODB_URI format: mongodb+srv://user:pass@cluster.mongodb.net/dbname\n` +
+                    `• Verify MongoDB cluster is running\n` +
+                    `• Check network access in MongoDB Atlas\n` +
+                    `Error: ${err.message}`
+                );
+            });
     }
 
     try {
@@ -30,8 +49,6 @@ export const connectToDatabase = async () => {
         cached.promise = null;
         throw err;
     }
-
-    console.log(`Connected to database ${process.env.NODE_ENV} - ${MONGODB_URI}`);
 
     return cached.conn;
 }

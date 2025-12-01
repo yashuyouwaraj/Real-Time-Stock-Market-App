@@ -9,7 +9,9 @@ export const signUpWithEmail = async ({ email, password, fullName, country, inve
         const response = await auth.api.signUpEmail({ body: { email, password, name: fullName } })
 
         if(response?.error) {
-            return { success: false, error: response.error.message || 'Sign up failed' }
+            const errorMsg = response.error.message || 'Sign up failed';
+            console.error('Sign up error:', errorMsg);
+            return { success: false, error: errorMsg }
         }
 
         if(response) {
@@ -28,7 +30,16 @@ export const signUpWithEmail = async ({ email, password, fullName, country, inve
 
         return { success: true, data: response }
     } catch (e) {
-        const errorMessage = e instanceof Error ? e.message : 'Sign up failed';
+        let errorMessage = 'Sign up failed';
+        if (e instanceof Error) {
+            errorMessage = e.message;
+            if (e.message.includes('MONGODB_URI')) {
+                errorMessage = 'Database not configured. Please set MONGODB_URI in environment variables.';
+            }
+            if (e.message.includes('MongoDB connection')) {
+                errorMessage = 'Unable to connect to database. Check your MONGODB_URI and MongoDB Atlas settings.';
+            }
+        }
         console.error('Sign up error:', e)
         return { success: false, error: errorMessage }
     }
@@ -40,12 +51,26 @@ export const signInWithEmail = async ({ email, password }: SignInFormData) => {
         const response = await auth.api.signInEmail({ body: { email, password } })
 
         if(response?.error) {
-            return { success: false, error: response.error.message || 'Sign in failed' }
+            const errorMsg = response.error.message || 'Sign in failed';
+            console.error('Sign in error:', errorMsg);
+            return { success: false, error: errorMsg }
         }
 
         return { success: true, data: response }
     } catch (e) {
-        const errorMessage = e instanceof Error ? e.message : 'Sign in failed';
+        let errorMessage = 'Sign in failed';
+        if (e instanceof Error) {
+            errorMessage = e.message;
+            if (e.message.includes('MONGODB_URI')) {
+                errorMessage = 'Database not configured. Please set MONGODB_URI in environment variables.';
+            }
+            if (e.message.includes('MongoDB connection')) {
+                errorMessage = 'Unable to connect to database. Check your MONGODB_URI and MongoDB Atlas settings.';
+            }
+            if (e.message.includes('Invalid credentials') || e.message.includes('user not found')) {
+                errorMessage = 'Invalid email or password.';
+            }
+        }
         console.error('Sign in error:', e)
         return { success: false, error: errorMessage }
     }
@@ -57,7 +82,16 @@ export const signOut = async () => {
         await auth.api.signOut({ headers: await headers() });
         return { success: true }
     } catch (e) {
-        const errorMessage = e instanceof Error ? e.message : 'Sign out failed';
+        let errorMessage = 'Sign out failed';
+        if (e instanceof Error) {
+            errorMessage = e.message;
+            if (e.message.includes('MONGODB_URI')) {
+                errorMessage = 'Database not configured.';
+            }
+            if (e.message.includes('MongoDB connection')) {
+                errorMessage = 'Unable to connect to database.';
+            }
+        }
         console.error('Sign out error:', e)
         return { success: false, error: errorMessage }
     }
