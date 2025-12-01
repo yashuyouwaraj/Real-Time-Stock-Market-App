@@ -1,7 +1,5 @@
 'use client';
 
-export const dynamic = 'force-dynamic';
-
 import {useForm} from "react-hook-form";
 import {Button} from "@/components/ui/button";
 import InputField from "@/components/forms/InputField";
@@ -36,7 +34,13 @@ const SignUp = () => {
     const onSubmit = async (data: SignUpFormData) => {
         try {
             const result = await signUpWithEmail(data);
-            if(result.success) router.push('/');
+            if(result.success) {
+                router.push('/');
+            } else {
+                toast.error('Sign up failed', {
+                    description: result.error || 'Failed to create an account.'
+                })
+            }
         } catch (e) {
             console.error(e);
             toast.error('Sign up failed', {
