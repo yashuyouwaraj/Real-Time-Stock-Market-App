@@ -120,43 +120,60 @@ Install the project dependencies using npm :
 npm install
 ```
 
+**📖 Setup Guides**
+
+We provide two setup guides to help you get started quickly:
+
+1. **[`ENV_SETUP_QUICK.md`](ENV_SETUP_QUICK.md)** - 5-minute quick start with environment template and error fixes table
+2. **[`SETUP_GUIDE.md`](SETUP_GUIDE.md)** - Comprehensive guide covering MongoDB, authentication, API keys, local development, and Vercel deployment
+
 **Set Up Environment Variables**
 
-Create a new file named `.env` in the root of your project and add the following content:
+Create a new file named `.env.local` in the root of your project and add the following content:
 
 ```env
 NODE_ENV='development'
 NEXT_PUBLIC_BASE_URL=http://localhost:3000
 
-# FINNHUB
-NEXT_PUBLIC_NEXT_PUBLIC_FINNHUB_API_KEY=
-FINNHUB_BASE_URL=https://finnhub.io/api/v1
+# MONGODB (Required)
+MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/dbname
 
-# MONGODB
-MONGODB_URI=
-
-# BETTER AUTH
-BETTER_AUTH_SECRET=
+# BETTER AUTH (Required)
+BETTER_AUTH_SECRET=your-secret-key-here
 BETTER_AUTH_URL=http://localhost:3000
 
-# GEMINI
+# FINNHUB (Recommended for stock data)
+FINNHUB_API_KEY=
+
+# GEMINI (Optional - for AI insights)
 GEMINI_API_KEY=
 
-#NODEMAILER
-NODEMAILER_EMAIL=
-NODEMAILER_PASSWORD=
+# NODEMAILER (Optional - for email notifications)
+EMAIL_FROM=
+EMAIL_PASSWORD=
 ```
 
-Replace the placeholder values with your real credentials. You can get these by signing up at: [**MongoDB**](https://www.mongodb.com/products/platform/atlas-database), [**Gemini**](https://aistudio.google.com/prompts/new_chat?utm_source=chatgpt.com), [**Inngest**](https://jsm.dev/stocks-inggest), [**Finnhub**](https://finnhub.io).
+**Getting Your Credentials**
+
+- **MongoDB**: Sign up at [MongoDB Atlas](https://www.mongodb.com/products/platform/atlas-database) (free tier available)
+- **BETTER_AUTH_SECRET**: Generate using: `node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"`
+- **Finnhub API Key**: Get from [Finnhub](https://finnhub.io)
+- **Gemini API Key**: Get from [Google AI Studio](https://aistudio.google.com/apikey)
+- **Email Service**: Use Gmail with [App Passwords](https://myaccount.google.com/apppasswords)
+
+For detailed instructions, see [`SETUP_GUIDE.md`](SETUP_GUIDE.md).
 
 **Running the Project**
 
 ```bash
 npm run dev
+# In another terminal:
 npx inngest-cli@latest dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) in your browser to view the project.
+
+Try signing up at `/sign-up` and signing in at `/sign-in` to test the authentication flow.
 
 ## <a name="links">🔗 Assets</a>
 
