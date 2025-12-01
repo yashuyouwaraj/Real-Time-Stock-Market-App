@@ -1,17 +1,11 @@
 import Link from "next/link";
 import Image from "next/image";
-import {getAuth} from "@/lib/better-auth/auth";
 import {headers} from "next/headers";
 import {redirect} from "next/navigation";
 
 export const dynamic = 'force-dynamic';
 
 const Layout = async ({ children }: { children : React.ReactNode }) => {
-    const auth = await getAuth();
-    const session = await auth.api.getSession({ headers: await headers() })
-
-    if(session?.user) redirect('/')
-
     return (
         <main className="auth-layout">
             <section className="auth-left-section scrollbar-hide-default">
