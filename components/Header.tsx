@@ -3,7 +3,7 @@ import Link from "next/link";
 import NavItems from "./NavItems";
 import UserDropDown from "./UserDropDown";
 
-const Header = async () => {
+const Header = async ({user}:{user:User}) => {
   return (
     <header className="sticky top-0 header">
       <div className="container header-wrapper">
@@ -19,7 +19,7 @@ const Header = async () => {
         <nav className="hidden sm:block">
           <NavItems />
         </nav>
-        <UserDropDown />
+        <UserDropDown user={user}/>
       </div>
     </header>
   );
