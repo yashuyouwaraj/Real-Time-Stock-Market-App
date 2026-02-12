@@ -1,55 +1,151 @@
-# Signalist - Real-Time Stock Market Platform
+﻿# Signalist
 
-Signalist is a full-stack stock market app built with Next.js, focused on fast market discovery, personalized watchlists, and practical daily updates.
+**TradingView-inspired stock intelligence dashboard for tracking markets, managing watchlists, and running actionable workflows in one place.**
 
-It combines real-time market widgets, search-driven tracking, and email workflows into a single modern dashboard.
+Signalist is a full-stack Next.js fintech application focused on practical market operations: discover symbols, monitor watchlists, screen opportunities, create alerts, track portfolio positions, follow market news, and receive AI-generated daily brief emails.
 
----
-
-## Highlights
-
-- Real-time market dashboard with TradingView embeds
-- Fast stock search with watchlist star actions
-- Dedicated watchlist page with live updates
-- Stock detail page with advanced TradingView widgets
-- Infinite-scroll news feed (`20` items per page)
-- Authentication and user sessions with Better Auth
-- Automated daily news summaries via Inngest
-- Email unsubscribe flow with signed tokens
-- Responsive dark UI optimized for desktop and mobile
+![Dashboard Overview](public/stock-market-app-ss/Dashboard.png)
+*Main dashboard with market widgets and regime context.*
 
 ---
 
-## What Is New
+## Overview
 
-- Added **News** section in navigation (`/news`)
-- Built **infinite news feed** with API pagination (`/api/news`)
-- Improved watchlist UX and polished UI styling
-- Added watchlist sync event so updates reflect instantly across pages
-- Implemented secure **unsubscribe** flow for notification emails
-- Improved TradingView performance with viewport-based lazy loading
+Signalist solves a common problem for retail/informed investors: market context and personal workflows are usually split across multiple tools.
+
+This app brings them into one cohesive product:
+- Live market context (TradingView widgets)
+- Personalized workflows (watchlist, folders, alerts, portfolio, earnings reminders)
+- Daily intelligence layer (AI brief + email automation)
+- Professional dark UI built for high-density information scanning
 
 ---
 
-## Screenshots
+## Key Features
 
-### Sign In
-![Sign In](public/stock-market-app-ss/SignInPage.png)
+### Market Dashboard & Charts
+- Live TradingView widgets for overview, heatmap, market quotes, and top stories
+- Dedicated stock details page with multiple chart/analysis widgets
+- Market regime snapshot for quick risk context
 
-### Sign Up
-![Sign Up](public/stock-market-app-ss/SignUpPage.png)
+![Stock Details](public/stock-market-app-ss/StockPage.png)
+*Stock details workspace with chart-focused analysis blocks.*
 
-### Dashboard
-![Dashboard](public/stock-market-app-ss/Dashboard.png)
+### Search + Watchlist Workflow
+- Fast stock search with debounced queries
+- One-click star/unstar watchlist actions
+- Watchlist table with folder-based grouping
+- Cross-page watchlist sync via custom browser event (`watchlist:updated`)
 
-### Search
-![Search](public/stock-market-app-ss/Search.png)
-
-### Watchlist
 ![Watchlist](public/stock-market-app-ss/Watchlist.png)
+*Watchlist with folder organization and quick actions.*
 
-### News
-![News](public/stock-market-app-ss/News.png)
+### News Intelligence
+- Infinite-scroll market news feed (`20` items per page)
+- Relevance scoring based on watchlist symbol mentions + recency
+- TradingView timeline integration for live headlines
+
+![News Feed](public/stock-market-app-ss/News.png)
+*Infinite news feed with relevance ranking.*
+
+### Portfolio, Alerts, Screener, Compare
+- Portfolio tracker for position quantity and average cost
+- Smart alert rules (price thresholds, % move, volume spike, gap alerts)
+- Backtest-lite endpoint for 30-day alert hit-rate checks
+- Stock screener filters (market cap, P/E, volume, change, sector)
+- Multi-symbol comparison (up to 4 symbols)
+
+![Portfolio Tracker](public/stock-market-app-ss/PortfolioTracker.png)
+*Portfolio position management and capital overview.*
+
+![Alerts](public/stock-market-app-ss/Alert.png)
+*Rule-based alert engine with operational controls.*
+
+![Screener](public/stock-market-app-ss/Screener.png)
+*Filter-based screener for quick opportunity discovery.*
+
+![Compare](public/stock-market-app-ss/Compare.png)
+*Side-by-side stock comparison across key metrics.*
+
+### Earnings & AI Digest
+- Earnings reminders CRUD + upcoming earnings view for watchlist symbols
+- AI Daily Brief generated through Inngest workflows and stored per user
+- In-app brief page + email delivery
+
+![Earnings](public/stock-market-app-ss/Earnings.png)
+*Earnings reminders and watchlist earnings tracking.*
+
+---
+
+## Innovations & Engineering Highlights
+
+- **Event-driven automation:** Inngest handles signup welcome flow, daily news summaries, and daily AI brief generation.
+- **Secure email preference controls:** Signed unsubscribe tokens, backend verification, unauthenticated link support, and marketing-send gating.
+- **Rate-limit-aware data access:** Finnhub calls include retry/backoff and controlled batching for screener workloads.
+- **Operational UX sync:** Watchlist updates are reflected across active views without full page reloads.
+- **Widget performance strategy:** TradingView widgets are lazy-mounted with `IntersectionObserver` to reduce initial page cost.
+
+---
+
+## UI/UX Approach
+
+- TradingView-style professional dark theme (`#0f1116`, `#161a23`, `#1c2130`)
+- High-contrast typography and muted secondary text for readability
+- Dense but organized card/table layout for fast scanning
+- Consistent interactions: subtle transitions, status colors, hover states
+- Responsive behavior across desktop and mobile layouts
+
+---
+
+## Architecture Overview
+
+Signalist uses a modular App Router architecture:
+
+```txt
+app/
+  (auth)/                 # Sign-in / sign-up
+  (root)/                 # Main authenticated product pages
+  api/                    # Route handlers (alerts, news, screener, etc.)
+  unsubscribe/            # Unsubscribe confirmation UI
+  email-preferences/      # Email subscription preferences UI
+
+components/               # Feature-first React components
+lib/
+  actions/                # Server-side domain logic (Finnhub, users, watchlist, briefs)
+  better-auth/            # Auth initialization
+  inngest/                # Workflows + prompts
+  nodemailer/             # Mail transport + templates
+  subscription.ts         # Subscription state utilities
+  unsubscribe.ts          # Signed token utilities
+
+database/
+  mongoose.ts             # Connection caching
+  models/                 # Domain schemas (watchlist, alerts, briefs, etc.)
+
+hooks/                    # UI perf hooks (debounce, TradingView lazy mount)
+public/stock-market-app-ss/
+                          # README screenshots
+```
+
+---
+
+## State Management Strategy
+
+- **Server state:** App Router server components + route handlers + Mongoose models
+- **Client state:** local component state (`useState`, `useMemo`, `useEffect`) per feature module
+- **No global client store:** intentional feature-local state boundaries keep complexity low
+- **Event-based synchronization:** selected flows (watchlist) propagate updates through custom events
+
+---
+
+## Performance & Optimization
+
+- Debounced stock search to cut query burst traffic
+- Lazy widget mounting with viewport detection
+- News feed URL deduplication while paginating
+- Batching + pacing for screener data fetches
+- Retry/backoff on external API throttling (HTTP `429`)
+- Shared MongoDB connection cache to avoid reconnect overhead
 
 ---
 
@@ -60,42 +156,30 @@ It combines real-time market widgets, search-driven tracking, and email workflow
 - React 19
 - TypeScript
 - Tailwind CSS v4
-- Radix UI + shadcn patterns
+- shadcn/Radix UI primitives
 - Lucide icons
 
-### Backend and Data
+### Backend & Data
 - Next.js Route Handlers
 - MongoDB + Mongoose
-- Better Auth (email/password auth)
+- Better Auth (email/password)
 
-### Automation and Integrations
-- Finnhub API (stocks and market news)
-- TradingView widgets
-- Inngest (cron/event workflows)
-- Gemini (AI summarization in workflows)
-- Nodemailer (email delivery)
+### Integrations
+- Finnhub API (quotes, profiles, news, earnings, financial metrics)
+- TradingView widgets (charting and market modules)
+- Inngest (scheduled and event-driven jobs)
+- Gemini API via Inngest AI interface (brief/news summarization)
+- Nodemailer (transactional/marketing email workflows)
 
----
-
-## Project Structure
-
-```txt
-app/                    # App Router pages, layouts, API routes
-components/             # Reusable UI and feature components
-lib/actions/            # Server actions (auth, watchlist, news, etc.)
-lib/inngest/            # Inngest client, functions, prompts
-lib/nodemailer/         # Email transport + templates
-database/               # Mongoose connection and models
-hooks/                  # Client hooks (debounce, TradingView mount)
-types/                  # Global TypeScript types
-public/stock-market-app-ss/  # README screenshots
-```
+### Tooling
+- ESLint
+- Turbopack (Next.js 16)
 
 ---
 
-## Local Installation
+## Installation & Setup
 
-### 1) Clone and install
+### 1. Clone and install
 
 ```bash
 git clone <your-repo-url>
@@ -103,12 +187,13 @@ cd Real-Time-Stock-Market
 npm install
 ```
 
-### 2) Create environment file
+### 2. Configure environment variables
 
-Create `.env.local` in project root and add:
+Create `.env.local` in the project root:
 
 ```env
 MONGODB_URI=
+
 BETTER_AUTH_SECRET=
 BETTER_AUTH_URL=http://localhost:3000
 
@@ -121,36 +206,67 @@ NODEMAILER_EMAIL=
 NODEMAILER_PASSWORD=
 
 NEXT_PUBLIC_APP_URL=http://localhost:3000
-# Optional:
+# Optional
 # UNSUBSCRIBE_SECRET=
 ```
 
-### 3) Run the app
+### 3. Run locally
 
 ```bash
 npm run dev
 ```
 
-Open `http://localhost:3000`
+Open: `http://localhost:3000`
 
----
-
-## Scripts
+### 4. Build for production
 
 ```bash
-npm run dev     # Start development server
-npm run lint    # Run ESLint
-npm run build   # Build for production
-npm run start   # Start production server
+npm run build
+npm run start
 ```
 
 ---
 
-## Why This Project Stands Out
+## Available Scripts
 
-- Practical product flow: auth -> search -> watchlist -> alerts/news -> email
-- Real-time market context + personalized user workflow
-- Infinite-scroll news and watchlist-first UX
-- Full-stack implementation with secure unsubscribe and automation support
-- Production-ready foundation for adding portfolio analytics, advanced alerts, and brokerage integrations
+```bash
+npm run dev
+npm run lint
+npm run build
+npm run start
+```
 
+---
+
+## Future Improvements
+
+- Unified design-system tokens across all feature modules
+- Stronger API caching and pre-aggregation for heavy screens
+- Expanded automated test coverage for critical user flows
+- Enhanced analytics/observability for external API and job health
+
+---
+
+## Contribution
+
+Contributions are welcome. Open an issue first for major changes, then submit a PR with:
+- clear scope,
+- reproducible test steps,
+- and screenshots for UI changes.
+
+---
+
+## License
+
+No license file is currently defined in this repository.
+If open-source distribution is intended, add a license file (e.g., MIT).
+
+---
+
+## Authentication Screens
+
+![Sign In](public/stock-market-app-ss/SignInPage.png)
+*Sign-in experience.*
+
+![Sign Up](public/stock-market-app-ss/SignUpPage.png)
+*Sign-up flow with onboarding profile fields.*

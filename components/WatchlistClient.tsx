@@ -152,7 +152,7 @@ const WatchlistClient = ({ initialItems }: { initialItems: WatchlistItemRow[] })
   }
 
   return (
-    <div className="watchlist w-full space-y-6">
+    <div className="watchlist w-full page-stack">
       <section className="watchlist-hero">
         <div>
           <p className="text-sm uppercase tracking-[0.18em] text-yellow-500/80">Portfolio Radar</p>
@@ -174,18 +174,18 @@ const WatchlistClient = ({ initialItems }: { initialItems: WatchlistItemRow[] })
       <section className="watchlist-card p-4 md:p-5 space-y-4">
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
           <div className="flex flex-wrap gap-2">
-            <button
-              type="button"
-              className={`px-3 py-1.5 rounded-full text-sm border ${activeFolder === "all" ? "border-yellow-500 text-yellow-500" : "border-gray-600 text-gray-400"}`}
-              onClick={() => setActiveFolder("all")}
-            >
-              All
+              <button
+                type="button"
+                className={`pro-tab-btn ${activeFolder === "all" ? "pro-tab-btn-active" : ""}`}
+                onClick={() => setActiveFolder("all")}
+              >
+                All
             </button>
             {folders.map((folder) => (
               <button
                 key={folder.id}
                 type="button"
-                className={`px-3 py-1.5 rounded-full text-sm border ${activeFolder === folder.id ? "border-yellow-500 text-yellow-500" : "border-gray-600 text-gray-400"}`}
+                className={`pro-tab-btn ${activeFolder === folder.id ? "pro-tab-btn-active" : ""}`}
                 onClick={() => setActiveFolder(folder.id)}
               >
                 {folder.name}
@@ -194,12 +194,12 @@ const WatchlistClient = ({ initialItems }: { initialItems: WatchlistItemRow[] })
           </div>
 
           <div className="flex items-center gap-2">
-            <input
-              value={newFolderName}
-              onChange={(e) => setNewFolderName(e.target.value)}
-              placeholder="New folder"
-              className="h-9 px-3 rounded-md border border-gray-600 bg-gray-800 text-gray-200 text-sm"
-            />
+              <input
+                value={newFolderName}
+                onChange={(e) => setNewFolderName(e.target.value)}
+                placeholder="New folder"
+                className="pro-input h-9"
+              />
             <button type="button" className="watchlist-btn w-auto px-3" onClick={handleCreateFolder}>
               <FolderPlus className="h-4 w-4" />
               Add Folder
@@ -246,7 +246,7 @@ const WatchlistClient = ({ initialItems }: { initialItems: WatchlistItemRow[] })
                   <select
                     value={item.folderId || ""}
                     onChange={(e) => void handleFolderAssign(item.symbol, e.target.value)}
-                    className="h-9 px-2 rounded-md border border-gray-600 bg-gray-800 text-gray-200 text-sm"
+                    className="pro-select h-9 px-2"
                   >
                     <option value="">None</option>
                     {folders.map((folder) => (

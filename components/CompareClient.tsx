@@ -42,7 +42,7 @@ const CompareClient = ({ initialRows }: { initialRows: ComparisonRow[] }) => {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="page-stack">
       <section className="watchlist-hero">
         <div>
           <p className="text-sm uppercase tracking-[0.18em] text-yellow-500/80">Compare</p>
@@ -52,13 +52,13 @@ const CompareClient = ({ initialRows }: { initialRows: ComparisonRow[] }) => {
       </section>
 
       <section className="watchlist-card p-4 md:p-5 space-y-3">
-        <h2 className="text-lg font-semibold text-gray-100">Symbols</h2>
+        <h2 className="panel-title">Symbols</h2>
         <div className="flex flex-col md:flex-row gap-3">
           <input
             value={symbolsInput}
             onChange={(e) => setSymbolsInput(e.target.value)}
             placeholder="AAPL, MSFT, NVDA, AMZN"
-            className="h-10 px-3 rounded-md border border-gray-600 bg-gray-800 text-gray-200 text-sm md:flex-1"
+            className="pro-input md:flex-1"
           />
           <button type="button" className="watchlist-btn w-auto" onClick={() => void runCompare()}>
             {loading ? "Loading..." : "Compare"}

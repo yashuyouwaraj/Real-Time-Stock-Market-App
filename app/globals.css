@@ -115,21 +115,21 @@
 /* === CUSTOM COLOR THEME === */
 @theme {
   /* Extended Gray Scale */
-  --color-gray-900: #050505;
-  --color-gray-800: #141414;
-  --color-gray-700: #212328;
-  --color-gray-600: #30333A;
-  --color-gray-500: #9095A1;
-  --color-gray-400: #CCDADC;
+  --color-gray-900: #0f1116;
+  --color-gray-800: #161a23;
+  --color-gray-700: #1c2130;
+  --color-gray-600: #2b3344;
+  --color-gray-500: #8b96ab;
+  --color-gray-400: #c6cfdd;
 
   /* Vibrant Colors */
-  --color-blue-600: #5862FF;
-  --color-yellow-400: #FDD458;
-  --color-yellow-500: #E8BA40;
-  --color-teal-400: #0FEDBE;
-  --color-red-500: #FF495B;
-  --color-orange-500: #FF8243;
-  --color-purple-500: #D13BFF;
+  --color-blue-600: #3b82f6;
+  --color-yellow-400: #f4c84a;
+  --color-yellow-500: #d7ad3d;
+  --color-teal-400: #22c55e;
+  --color-red-500: #ef4444;
+  --color-orange-500: #f97316;
+  --color-purple-500: #8b5cf6;
 }
 
 @layer base {
@@ -137,7 +137,7 @@
     @apply border-border outline-ring/50;
   }
   body {
-    @apply bg-gray-900 text-foreground;
+    @apply bg-gray-900 text-foreground antialiased;
   }
 }
 
@@ -146,7 +146,7 @@
     @apply mx-auto max-w-screen-2xl px-4 md:px-6 lg:px-8;
   }
   .yellow-btn {
-    @apply h-12 cursor-pointer bg-gradient-to-b from-yellow-400 to-yellow-500 hover:from-yellow-500 hover:to-yellow-400 text-gray-950 font-medium text-base rounded-lg shadow-lg disabled:opacity-50;
+    @apply h-12 cursor-pointer bg-yellow-500 hover:bg-yellow-400 text-gray-950 font-medium text-base rounded-lg border border-yellow-400/60 transition-all duration-200 disabled:opacity-50;
   }
   .home-wrapper {
     @apply text-gray-400 flex-col gap-4 md:gap-10 items-center sm:items-start;
@@ -155,7 +155,7 @@
     @apply w-full gap-8 grid-cols-1 md:grid-cols-2 xl:grid-cols-3;
   }
   .header {
-    @apply z-50 w-full h-[70px] bg-gray-800;
+    @apply z-50 w-full h-[70px] bg-gray-800/90 border-b border-gray-700/80 backdrop-blur;
   }
   .header-wrapper {
     @apply flex justify-between items-center px-6 py-4 text-gray-500;
@@ -212,10 +212,10 @@
     @apply cursor-pointer hover:text-yellow-500;
   }
   .search-btn {
-    @apply cursor-pointer px-4 py-2 w-fit flex items-center gap-2 text-sm md:text-base bg-yellow-500 hover:bg-yellow-500 text-black font-medium rounded;
+    @apply cursor-pointer px-4 py-2 w-fit flex items-center gap-2 text-sm md:text-base bg-yellow-500 hover:bg-yellow-400 text-gray-950 font-medium rounded-md border border-yellow-400/60 transition-colors duration-200;
   }
   .search-dialog {
-    @apply !bg-gray-800 lg:min-w-[800px] border-gray-600 fixed top-10 left-1/2 -translate-x-1/2 translate-y-10;
+    @apply !bg-gray-800 lg:min-w-[800px] border-gray-600 fixed top-10 left-1/2 -translate-x-1/2 translate-y-10 rounded-xl;
   }
   .search-field {
     @apply !bg-gray-800 border-b border-gray-600 relative;
@@ -236,7 +236,7 @@
     @apply absolute right-12 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-500 animate-spin;
   }
   .search-count {
-    @apply py-2 px-4 text-sm font-medium text-gray-400 bg-gray-700 border-b border-gray-700;
+    @apply py-2 px-4 text-sm font-medium text-gray-400 bg-gray-700/70 border-b border-gray-600;
   }
   .search-item {
     @apply rounded-none my-3 px-1 w-full data-[selected=true]:bg-gray-600;
@@ -248,13 +248,13 @@
     @apply font-medium text-base text-gray-400;
   }
   .nav-list {
-    @apply flex flex-col sm:flex-row p-2 gap-3 sm:gap-10 font-medium;
+    @apply flex flex-col sm:flex-row p-2 gap-3 sm:gap-8 font-medium;
   }
   .stock-details-container {
     @apply w-full grid-cols-1 gap-6 xl:grid-cols-3 space-y-6 sm:space-y-8;
   }
   .watchlist-btn {
-    @apply inline-flex items-center justify-center gap-2 bg-yellow-400 text-sm text-gray-950 w-full rounded-xl h-10 font-semibold cursor-pointer px-4 leading-none border border-yellow-300 transition-all duration-200 hover:bg-yellow-300 disabled:cursor-not-allowed disabled:opacity-60;
+    @apply inline-flex items-center justify-center gap-2 bg-yellow-500 text-sm text-gray-950 w-full rounded-lg h-10 font-semibold cursor-pointer px-4 leading-none border border-yellow-400/50 transition-colors duration-200 hover:bg-yellow-400 disabled:cursor-not-allowed disabled:opacity-60;
   }
   .watchlist-remove {
     @apply !bg-gray-700 !text-gray-100 !border-gray-500 hover:!bg-gray-600 hover:!text-white;
@@ -305,37 +305,64 @@
     @apply text-xl md:text-2xl font-bold text-gray-100;
   }
   .watchlist-table {
-    @apply !relative overflow-hidden !w-full bg-gray-800/95 border !border-gray-600 !rounded-2xl shadow-[0_20px_45px_rgba(0,0,0,0.25)];
+    @apply !relative overflow-hidden !w-full bg-gray-800/95 border !border-gray-600 !rounded-2xl;
   }
   .table-header-row {
-    @apply text-gray-400 font-medium bg-gray-700 border-b border-gray-600 hover:bg-gray-700;
+    @apply text-gray-400 font-medium bg-gray-700/70 border-b border-gray-600 hover:bg-gray-700/70;
   }
   .table-header:first-child {
     @apply pl-4;
   }
   .table-row {
-    @apply border-b cursor-pointer text-gray-100 border-gray-600 hover:bg-gray-700/50 transition-colors;
+    @apply border-b cursor-pointer text-gray-100 border-gray-600 hover:bg-gray-700/35 transition-colors duration-200;
   }
   .table-cell {
     @apply font-medium text-base
   }
+  .page-stack {
+    @apply space-y-5 md:space-y-6;
+  }
+  .panel-title {
+    @apply text-base md:text-lg font-semibold text-gray-100 tracking-tight;
+  }
+  .panel-subtitle {
+    @apply text-sm text-gray-400;
+  }
+  .pro-input {
+    @apply h-10 px-3 rounded-md border border-gray-600 bg-gray-800 text-gray-200 text-sm outline-none transition-colors duration-200 focus:border-gray-500;
+  }
+  .pro-select {
+    @apply h-10 px-3 rounded-md border border-gray-600 bg-gray-800 text-gray-200 text-sm outline-none transition-colors duration-200 focus:border-gray-500;
+  }
+  .pro-tab-btn {
+    @apply px-3 py-1.5 rounded-full text-sm border border-gray-600 text-gray-400 transition-colors duration-200 hover:border-gray-500 hover:text-gray-200;
+  }
+  .pro-tab-btn-active {
+    @apply border-yellow-500/50 text-yellow-400 bg-yellow-500/10;
+  }
+  .metric-positive {
+    @apply text-teal-400;
+  }
+  .metric-negative {
+    @apply text-red-500;
+  }
   .watchlist-card {
-    @apply bg-gray-800 border border-gray-600 rounded-2xl shadow-[0_16px_40px_rgba(0,0,0,0.2)];
+    @apply bg-gray-800 border border-gray-600 rounded-2xl;
   }
   .watchlist-hero {
-    @apply bg-gray-800 border border-gray-600 rounded-2xl shadow-[0_16px_40px_rgba(0,0,0,0.2)] p-6 md:p-8 flex flex-col lg:flex-row gap-6 lg:items-center lg:justify-between;
+    @apply bg-gray-800 border border-gray-600 rounded-2xl p-5 md:p-6 flex flex-col lg:flex-row gap-5 lg:items-center lg:justify-between;
   }
   .watchlist-metrics {
     @apply grid grid-cols-1 sm:grid-cols-2 gap-3 min-w-[280px];
   }
   .watchlist-metric-card {
-    @apply rounded-xl border border-gray-600 bg-gray-700/40 px-4 py-3;
+    @apply rounded-xl border border-gray-600 bg-gray-700/30 px-4 py-3;
   }
   .watchlist-metric-label {
     @apply text-xs uppercase tracking-[0.12em] text-gray-500;
   }
   .watchlist-metric-value {
-    @apply mt-1 text-2xl font-bold text-yellow-500;
+    @apply mt-1 text-2xl font-bold text-yellow-400;
   }
   .watchlist-metric-value-sm {
     @apply mt-1 text-base font-semibold text-gray-200;
@@ -353,7 +380,7 @@
     @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4;
   }
   .news-item {
-    @apply bg-gray-800 rounded-lg border w-full border-gray-600  p-4 duration-200 hover:border-gray-600 cursor-pointer;
+    @apply bg-gray-800 rounded-lg border w-full border-gray-600 p-4 duration-200 hover:border-gray-500 cursor-pointer;
   }
   .news-tag {
     @apply inline-block w-fit px-2 py-1 mb-5 rounded bg-gray-600/60 text-green-500 text-sm font-mono font-medium;
@@ -410,7 +437,7 @@
     @apply flex min-h-screen flex-col gap-8;
   }
   .news-hero {
-    @apply rounded-2xl border border-gray-600 bg-gradient-to-br from-gray-800 via-gray-800 to-gray-700/70 p-6 md:p-8 flex flex-col gap-5 md:flex-row md:items-end md:justify-between;
+    @apply rounded-2xl border border-gray-600 bg-gray-800 p-6 md:p-8 flex flex-col gap-5 md:flex-row md:items-end md:justify-between;
   }
   .news-kicker {
     @apply text-xs uppercase tracking-[0.18em] text-yellow-500/90 font-semibold;
@@ -443,7 +470,7 @@
     @apply grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5;
   }
   .news-card {
-    @apply rounded-2xl border border-gray-600 bg-gray-800/90 p-5 transition-all duration-200 hover:border-yellow-500/35 hover:-translate-y-0.5 flex flex-col;
+    @apply rounded-2xl border border-gray-600 bg-gray-800/90 p-5 transition-all duration-200 hover:border-yellow-500/35 flex flex-col;
   }
   .news-card-top {
     @apply flex items-center justify-between gap-3 mb-4;
@@ -484,30 +511,31 @@
 /* TradingView Advanced Chart Widget Styles */
 .tradingview-widget-container {
   position: relative;
-  background-color: #141414 !important;
+  background-color: #161a23 !important;
+  border: 1px solid #2b3344 !important;
   border-radius: 8px !important;
   overflow: hidden !important;
 }
 
 .tv-embed-widget-wrapper__body {
-  background-color: #141414 !important;
+  background-color: #161a23 !important;
 }
 
 .tradingview-widget-container__widget {
-  background-color: #141414 !important;
+  background-color: #161a23 !important;
   height: 100% !important;
 
 }
 
 .widget-stock-heatmap-container .screenerMapWrapper-BBVfGP0b {
   overflow: hidden !important;
-  background: #141414 !important;
-  background-color: #141414 !important;
+  background: #161a23 !important;
+  background-color: #161a23 !important;
 }
 
 .canvasContainer-tyaAU8aH {
-  background: #141414 !important;
-  background-color: #141414 !important;
+  background: #161a23 !important;
+  background-color: #161a23 !important;
 }
 
 .tv-site-widget--bg_none {
@@ -534,17 +562,17 @@
 }
 
 .tv-embed-widget-wrapper .tv-embed-widget-wrapper__body {
-  background: #141414 !important;
-  background-color: #141414 !important;
+  background: #161a23 !important;
+  background-color: #161a23 !important;
 }
 
 .tradingview-widget-container iframe {
-  background-color: #141414 !important;
+  background-color: #161a23 !important;
   width: 100% !important;
 }
 
 .custom-chart.tradingview-widget-container iframe {
-  border: 1px solid #30333A;
+  border: 1px solid #2b3344;
   border-radius: 8px !important;
   overflow: hidden !important;
 }
