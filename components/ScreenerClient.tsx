@@ -44,7 +44,7 @@ const ScreenerClient = ({ initialRows }: { initialRows: ScreenerRow[] }) => {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="page-stack">
       <section className="watchlist-hero">
         <div>
           <p className="text-sm uppercase tracking-[0.18em] text-yellow-500/80">Discovery</p>
@@ -54,13 +54,13 @@ const ScreenerClient = ({ initialRows }: { initialRows: ScreenerRow[] }) => {
       </section>
 
       <section className="watchlist-card p-4 md:p-5 space-y-3">
-        <h2 className="text-lg font-semibold text-gray-100">Filters</h2>
+        <h2 className="panel-title">Filters</h2>
         <div className="grid grid-cols-1 md:grid-cols-5 gap-3">
-          <input placeholder="Min Market Cap (USD)" value={filters.minMarketCap} onChange={(e) => setFilters((f) => ({ ...f, minMarketCap: e.target.value }))} className="h-10 px-3 rounded-md border border-gray-600 bg-gray-800 text-gray-200 text-sm" />
-          <input placeholder="Max P/E" value={filters.maxPe} onChange={(e) => setFilters((f) => ({ ...f, maxPe: e.target.value }))} className="h-10 px-3 rounded-md border border-gray-600 bg-gray-800 text-gray-200 text-sm" />
-          <input placeholder="Min Volume" value={filters.minVolume} onChange={(e) => setFilters((f) => ({ ...f, minVolume: e.target.value }))} className="h-10 px-3 rounded-md border border-gray-600 bg-gray-800 text-gray-200 text-sm" />
-          <input placeholder="Min % Change" value={filters.minChange} onChange={(e) => setFilters((f) => ({ ...f, minChange: e.target.value }))} className="h-10 px-3 rounded-md border border-gray-600 bg-gray-800 text-gray-200 text-sm" />
-          <input placeholder="Sector contains..." value={filters.sector} onChange={(e) => setFilters((f) => ({ ...f, sector: e.target.value }))} className="h-10 px-3 rounded-md border border-gray-600 bg-gray-800 text-gray-200 text-sm" />
+          <input placeholder="Min Market Cap (USD)" value={filters.minMarketCap} onChange={(e) => setFilters((f) => ({ ...f, minMarketCap: e.target.value }))} className="pro-input" />
+          <input placeholder="Max P/E" value={filters.maxPe} onChange={(e) => setFilters((f) => ({ ...f, maxPe: e.target.value }))} className="pro-input" />
+          <input placeholder="Min Volume" value={filters.minVolume} onChange={(e) => setFilters((f) => ({ ...f, minVolume: e.target.value }))} className="pro-input" />
+          <input placeholder="Min % Change" value={filters.minChange} onChange={(e) => setFilters((f) => ({ ...f, minChange: e.target.value }))} className="pro-input" />
+          <input placeholder="Sector contains..." value={filters.sector} onChange={(e) => setFilters((f) => ({ ...f, sector: e.target.value }))} className="pro-input" />
         </div>
         <button type="button" className="watchlist-btn w-auto" onClick={() => void runScreener()}>
           {loading ? "Screening..." : "Run Screener"}

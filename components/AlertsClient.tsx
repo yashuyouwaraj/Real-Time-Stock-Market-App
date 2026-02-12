@@ -113,7 +113,7 @@ const AlertsClient = ({ initialAlerts }: { initialAlerts: AlertRule[] }) => {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="page-stack">
       <section className="watchlist-hero">
         <div>
           <p className="text-sm uppercase tracking-[0.18em] text-yellow-500/80">Signal Engine</p>
@@ -133,19 +133,19 @@ const AlertsClient = ({ initialAlerts }: { initialAlerts: AlertRule[] }) => {
       </section>
 
       <section className="watchlist-card p-4 md:p-5 space-y-3">
-        <h2 className="text-lg font-semibold text-gray-100">Create Alert Rule</h2>
+        <h2 className="panel-title">Create Alert Rule</h2>
         <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
-          <input value={form.symbol} onChange={(e) => setForm((s) => ({ ...s, symbol: e.target.value }))} placeholder="Symbol" className="h-10 px-3 rounded-md border border-gray-600 bg-gray-800 text-gray-200 text-sm" />
-          <input value={form.company} onChange={(e) => setForm((s) => ({ ...s, company: e.target.value }))} placeholder="Company" className="h-10 px-3 rounded-md border border-gray-600 bg-gray-800 text-gray-200 text-sm" />
-          <select value={form.ruleType} onChange={(e) => setForm((s) => ({ ...s, ruleType: e.target.value as AlertRule["ruleType"] }))} className="h-10 px-3 rounded-md border border-gray-600 bg-gray-800 text-gray-200 text-sm">
+          <input value={form.symbol} onChange={(e) => setForm((s) => ({ ...s, symbol: e.target.value }))} placeholder="Symbol" className="pro-input" />
+          <input value={form.company} onChange={(e) => setForm((s) => ({ ...s, company: e.target.value }))} placeholder="Company" className="pro-input" />
+          <select value={form.ruleType} onChange={(e) => setForm((s) => ({ ...s, ruleType: e.target.value as AlertRule["ruleType"] }))} className="pro-select">
             {ruleOptions.map((opt) => (
               <option key={opt.value} value={opt.value}>{opt.label}</option>
             ))}
           </select>
-          <input value={form.threshold} onChange={(e) => setForm((s) => ({ ...s, threshold: e.target.value }))} placeholder="Threshold" type="number" step="any" className="h-10 px-3 rounded-md border border-gray-600 bg-gray-800 text-gray-200 text-sm" />
-          <input value={form.cooldownMinutes} onChange={(e) => setForm((s) => ({ ...s, cooldownMinutes: e.target.value }))} placeholder="Cooldown minutes" type="number" min="0" className="h-10 px-3 rounded-md border border-gray-600 bg-gray-800 text-gray-200 text-sm" />
-          <input value={form.quietHoursStart} onChange={(e) => setForm((s) => ({ ...s, quietHoursStart: e.target.value }))} placeholder="Quiet start (HH:mm)" className="h-10 px-3 rounded-md border border-gray-600 bg-gray-800 text-gray-200 text-sm" />
-          <input value={form.quietHoursEnd} onChange={(e) => setForm((s) => ({ ...s, quietHoursEnd: e.target.value }))} placeholder="Quiet end (HH:mm)" className="h-10 px-3 rounded-md border border-gray-600 bg-gray-800 text-gray-200 text-sm" />
+          <input value={form.threshold} onChange={(e) => setForm((s) => ({ ...s, threshold: e.target.value }))} placeholder="Threshold" type="number" step="any" className="pro-input" />
+          <input value={form.cooldownMinutes} onChange={(e) => setForm((s) => ({ ...s, cooldownMinutes: e.target.value }))} placeholder="Cooldown minutes" type="number" min="0" className="pro-input" />
+          <input value={form.quietHoursStart} onChange={(e) => setForm((s) => ({ ...s, quietHoursStart: e.target.value }))} placeholder="Quiet start (HH:mm)" className="pro-input" />
+          <input value={form.quietHoursEnd} onChange={(e) => setForm((s) => ({ ...s, quietHoursEnd: e.target.value }))} placeholder="Quiet end (HH:mm)" className="pro-input" />
         </div>
         <button type="button" className="watchlist-btn w-auto" onClick={() => void createAlert()}>
           Save Alert

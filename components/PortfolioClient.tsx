@@ -58,7 +58,7 @@ const PortfolioClient = ({ initialPositions }: { initialPositions: PortfolioPosi
   };
 
   return (
-    <div className="space-y-6">
+    <div className="page-stack">
       <section className="watchlist-hero">
         <div>
           <p className="text-sm uppercase tracking-[0.18em] text-yellow-500/80">Holdings</p>
@@ -78,12 +78,12 @@ const PortfolioClient = ({ initialPositions }: { initialPositions: PortfolioPosi
       </section>
 
       <section className="watchlist-card p-4 md:p-5 space-y-3">
-        <h2 className="text-lg font-semibold text-gray-100">Add / Update Position</h2>
+        <h2 className="panel-title">Add / Update Position</h2>
         <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
-          <input value={form.symbol} onChange={(e) => setForm((s) => ({ ...s, symbol: e.target.value }))} placeholder="Symbol (AAPL)" className="h-10 px-3 rounded-md border border-gray-600 bg-gray-800 text-gray-200 text-sm" />
-          <input value={form.company} onChange={(e) => setForm((s) => ({ ...s, company: e.target.value }))} placeholder="Company name" className="h-10 px-3 rounded-md border border-gray-600 bg-gray-800 text-gray-200 text-sm" />
-          <input value={form.quantity} onChange={(e) => setForm((s) => ({ ...s, quantity: e.target.value }))} placeholder="Quantity" type="number" min="0" step="any" className="h-10 px-3 rounded-md border border-gray-600 bg-gray-800 text-gray-200 text-sm" />
-          <input value={form.averageCost} onChange={(e) => setForm((s) => ({ ...s, averageCost: e.target.value }))} placeholder="Average cost" type="number" min="0" step="any" className="h-10 px-3 rounded-md border border-gray-600 bg-gray-800 text-gray-200 text-sm" />
+          <input value={form.symbol} onChange={(e) => setForm((s) => ({ ...s, symbol: e.target.value }))} placeholder="Symbol (AAPL)" className="pro-input" />
+          <input value={form.company} onChange={(e) => setForm((s) => ({ ...s, company: e.target.value }))} placeholder="Company name" className="pro-input" />
+          <input value={form.quantity} onChange={(e) => setForm((s) => ({ ...s, quantity: e.target.value }))} placeholder="Quantity" type="number" min="0" step="any" className="pro-input" />
+          <input value={form.averageCost} onChange={(e) => setForm((s) => ({ ...s, averageCost: e.target.value }))} placeholder="Average cost" type="number" min="0" step="any" className="pro-input" />
         </div>
         <button type="button" onClick={() => void savePosition()} className="watchlist-btn w-auto">
           Save Position
