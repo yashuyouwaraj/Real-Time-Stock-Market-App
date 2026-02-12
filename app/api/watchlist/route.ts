@@ -17,7 +17,7 @@ export async function GET() {
   }
 
   await connectToDatabase();
-  const items = await Watchlist.find({ userId }, { symbol: 1, company: 1, addedAt: 1 })
+  const items = await Watchlist.find({ userId }, { symbol: 1, company: 1, folderId: 1, addedAt: 1 })
     .sort({ addedAt: -1 })
     .lean();
 
@@ -25,6 +25,7 @@ export async function GET() {
     items: items.map((i) => ({
       symbol: String(i.symbol),
       company: String(i.company),
+      folderId: i.folderId ? String(i.folderId) : null,
       addedAt: new Date(i.addedAt ?? Date.now()).toISOString(),
     })),
   });
@@ -39,8 +40,10 @@ export async function POST(req: Request) {
   const body = await req.json().catch(() => ({}));
   const rawSymbol = typeof body?.symbol === 'string' ? body.symbol : '';
   const rawCompany = typeof body?.company === 'string' ? body.company : '';
+  const rawFolderId = typeof body?.folderId === "string" ? body.folderId : "";
   const symbol = rawSymbol.trim().toUpperCase();
   const company = rawCompany.trim() || symbol;
+  const folderId = rawFolderId.trim() || null;
 
   if (!symbol) {
     return NextResponse.json({ error: 'Symbol is required' }, { status: 400 });
@@ -49,7 +52,7 @@ export async function POST(req: Request) {
   await connectToDatabase();
   await Watchlist.updateOne(
     { userId, symbol },
-    { $setOnInsert: { company, addedAt: new Date() } },
+    { $setOnInsert: { company, addedAt: new Date(), folderId } },
     { upsert: true }
   );
 
@@ -74,4 +77,34 @@ export async function DELETE(req: Request) {
   await Watchlist.deleteOne({ userId, symbol });
 
   return NextResponse.json({ ok: true, symbol });
+}
+
+export async function PATCH(req: Request) {
+  const userId = await getSessionUserId();
+  if (!userId) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  const body = await req.json().catch(() => ({}));
+  const rawSymbol = typeof body?.symbol === "string" ? body.symbol : "";
+  const rawFolderId = typeof body?.folderId === "string" ? body.folderId : "";
+
+  const symbol = rawSymbol.trim().toUpperCase();
+  const folderId = rawFolderId.trim() || null;
+
+  if (!symbol) {
+    return NextResponse.json({ error: "Symbol is required" }, { status: 400 });
+  }
+
+  await connectToDatabase();
+  const result = await Watchlist.updateOne(
+    { userId, symbol },
+    { $set: { folderId } }
+  );
+
+  if (result.matchedCount === 0) {
+    return NextResponse.json({ error: "Watchlist item not found" }, { status: 404 });
+  }
+
+  return NextResponse.json({ ok: true, symbol, folderId });
 }

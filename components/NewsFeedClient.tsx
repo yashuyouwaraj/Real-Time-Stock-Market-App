@@ -7,14 +7,53 @@ import { ArrowUpRight, Clock3 } from "lucide-react";
 
 const PAGE_SIZE = 20;
 
-const NewsFeedClient = ({ initialItems, initialHasMore }: { initialItems: MarketNewsArticle[]; initialHasMore: boolean }) => {
+const NewsFeedClient = ({
+  initialItems,
+  initialHasMore,
+  watchlistSymbols = [],
+}: {
+  initialItems: MarketNewsArticle[];
+  initialHasMore: boolean;
+  watchlistSymbols?: string[];
+}) => {
   const [items, setItems] = useState<MarketNewsArticle[]>(initialItems);
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(false);
   const [hasMore, setHasMore] = useState(initialHasMore);
   const sentinelRef = useRef<HTMLDivElement | null>(null);
+  const watchlistSet = useMemo(
+    () => new Set(watchlistSymbols.map((s) => s.trim().toUpperCase()).filter(Boolean)),
+    [watchlistSymbols]
+  );
+
+  const scoreArticle = useCallback(
+    (article: MarketNewsArticle) => {
+      const text = `${article.headline} ${article.summary} ${article.related || ""}`.toUpperCase();
+      let symbolMatchCount = 0;
+      for (const symbol of watchlistSet) {
+        if (text.includes(symbol)) {
+          symbolMatchCount += 1;
+        }
+      }
+
+      const ageHours = Math.max(0, (Date.now() - article.datetime * 1000) / (1000 * 60 * 60));
+      const recencyScore = Math.max(0, 40 - ageHours);
+      const watchlistScore = Math.min(60, symbolMatchCount * 30);
+      return Math.round(recencyScore + watchlistScore);
+    },
+    [watchlistSet]
+  );
 
   const seenUrls = useMemo(() => new Set(items.map((i) => i.url)), [items]);
+
+  const rankedItems = useMemo(() => {
+    return [...items]
+      .map((item) => ({ item, score: scoreArticle(item) }))
+      .sort((a, b) => {
+        if (b.score !== a.score) return b.score - a.score;
+        return b.item.datetime - a.item.datetime;
+      });
+  }, [items, scoreArticle]);
 
   const loadMore = useCallback(async () => {
     if (loading || !hasMore) return;
@@ -66,11 +105,11 @@ const NewsFeedClient = ({ initialItems, initialHasMore }: { initialItems: Market
     <section className="space-y-5">
       <div className="news-feed-header">
         <h2 className="news-feed-title">Latest News Feed</h2>
-        <p className="news-feed-subtitle">{items.length} stories loaded</p>
+        <p className="news-feed-subtitle">{items.length} stories loaded • ranked by relevance</p>
       </div>
 
       <div className="news-feed-grid">
-        {items.map((article) => (
+        {rankedItems.map(({ item: article, score }) => (
           <article key={`${article.id}-${article.url}`} className="news-card">
             <div className="news-card-top">
               <span className="news-source-badge">{article.source}</span>
@@ -78,6 +117,10 @@ const NewsFeedClient = ({ initialItems, initialHasMore }: { initialItems: Market
                 <Clock3 className="h-3.5 w-3.5" />
                 {formatTimeAgo(article.datetime)}
               </p>
+            </div>
+
+            <div className="mb-3">
+              <span className="news-relevance-badge">Relevance {score}/100</span>
             </div>
 
             <h3 className="news-card-title">{article.headline}</h3>

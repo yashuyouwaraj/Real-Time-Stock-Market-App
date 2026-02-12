@@ -151,7 +151,8 @@ export const WELCOME_EMAIL_TEMPLATE = `<!DOCTYPE html>
                             <!-- Footer Text -->
                             <p class="mobile-text dark-text-muted" style="margin: 40px 0 0 0; font-size: 14px; line-height: 1.5; color: #CCDADC !important; text-align: center;">
                                Signalist HQ, 200 Market Street, San Francisco, CA 94105<br>
-                                <a href="{{unsubscribeUrl}}" style="color: #CCDADC !important; text-decoration: underline;">Unsubscribe</a> | 
+                                <a href="{{unsubscribeUrl}}" style="color: #CCDADC !important; text-decoration: underline;">Unsubscribe</a> |
+                                <a href="{{preferencesUrl}}" style="color: #CCDADC !important; text-decoration: underline;">Manage preferences</a> |
                                 <a href="https://stock-market-dev.vercel.app/" style="color: #CCDADC !important; text-decoration: underline;">Visit Signalist</a><br>
                                 © 2025 Signalist
                             </p>
@@ -287,7 +288,8 @@ export const NEWS_SUMMARY_EMAIL_TEMPLATE = `<!DOCTYPE html>
                                     You're receiving this because you subscribed to Signalist news updates.
                                 </p>
                                 <p style="margin: 0 0 10px 0; font-size: 14px; line-height: 1.5; color: #CCDADC !important;">
-                                    <a href="{{unsubscribeUrl}}" style="color: #CCDADC !important; text-decoration: underline;">Unsubscribe</a> | 
+                                    <a href="{{unsubscribeUrl}}" style="color: #CCDADC !important; text-decoration: underline;">Unsubscribe</a> |
+                                    <a href="{{preferencesUrl}}" style="color: #CCDADC !important; text-decoration: underline;">Manage preferences</a> |
                                     <a href="https://signalist.app" style="color: #CCDADC !important; text-decoration: underline;">Visit Signalist</a>
                                 </p>
                                 <p style="margin: 0; font-size: 14px; line-height: 1.5; color: #CCDADC !important;">
@@ -496,7 +498,8 @@ export const STOCK_ALERT_UPPER_EMAIL_TEMPLATE = `<!DOCTYPE html>
                                     You're receiving this because you subscribed to Signalist news updates.
                                 </p>
                                 <p style="margin: 0 0 10px 0; font-size: 14px; line-height: 1.5; color: #CCDADC !important;">
-                                    <a href="{{unsubscribeUrl}}" style="color: #CCDADC !important; text-decoration: underline;">Unsubscribe</a> | 
+                                    <a href="{{unsubscribeUrl}}" style="color: #CCDADC !important; text-decoration: underline;">Unsubscribe</a> |
+                                    <a href="{{preferencesUrl}}" style="color: #CCDADC !important; text-decoration: underline;">Manage preferences</a> |
                                     <a href="https://signalist.app" style="color: #CCDADC !important; text-decoration: underline;">Visit Signalist</a>
                                 </p>
                                 <p style="margin: 0; font-size: 14px; line-height: 1.5; color: #CCDADC !important;">
@@ -705,7 +708,8 @@ export const STOCK_ALERT_LOWER_EMAIL_TEMPLATE = `<!DOCTYPE html>
                                     You're receiving this because you subscribed to Signalist news updates.
                                 </p>
                                 <p style="margin: 0 0 10px 0; font-size: 14px; line-height: 1.5; color: #CCDADC !important;">
-                                    <a href="{{unsubscribeUrl}}" style="color: #CCDADC !important; text-decoration: underline;">Unsubscribe</a> | 
+                                    <a href="{{unsubscribeUrl}}" style="color: #CCDADC !important; text-decoration: underline;">Unsubscribe</a> |
+                                    <a href="{{preferencesUrl}}" style="color: #CCDADC !important; text-decoration: underline;">Manage preferences</a> |
                                     <a href="https://signalist.app" style="color: #CCDADC !important; text-decoration: underline;">Visit Signalist</a>
                                 </p>
                                 <p style="margin: 0; font-size: 14px; line-height: 1.5; color: #CCDADC !important;">
@@ -925,7 +929,8 @@ export const VOLUME_ALERT_EMAIL_TEMPLATE = `<!DOCTYPE html>
                                     You're receiving this because you subscribed to Signalist news updates.
                                 </p>
                                 <p style="margin: 0 0 10px 0; font-size: 14px; line-height: 1.5; color: #CCDADC !important;">
-                                    <a href="{{unsubscribeUrl}}" style="color: #CCDADC !important; text-decoration: underline;">Unsubscribe</a> | 
+                                    <a href="{{unsubscribeUrl}}" style="color: #CCDADC !important; text-decoration: underline;">Unsubscribe</a> |
+                                    <a href="{{preferencesUrl}}" style="color: #CCDADC !important; text-decoration: underline;">Manage preferences</a> |
                                     <a href="https://signalist.app" style="color: #CCDADC !important; text-decoration: underline;">Visit Signalist</a>
                                 </p>
                                 <p style="margin: 0; font-size: 14px; line-height: 1.5; color: #CCDADC !important;">
@@ -1092,7 +1097,8 @@ export const INACTIVE_USER_REMINDER_EMAIL_TEMPLATE = `<!DOCTYPE html>
                                     Questions? Reply to this email or contact our support team.
                                 </p>
                                 <p style="margin: 0 0 10px 0; font-size: 14px; line-height: 1.5; color: #CCDADC !important;">
-                                    <a href="{{unsubscribeUrl}}" style="color: #CCDADC !important; text-decoration: underline;">Unsubscribe</a> | 
+                                    <a href="{{unsubscribeUrl}}" style="color: #CCDADC !important; text-decoration: underline;">Unsubscribe</a> |
+                                    <a href="{{preferencesUrl}}" style="color: #CCDADC !important; text-decoration: underline;">Manage preferences</a> |
                                     <a href="{{dashboardUrl}}" style="color: #CCDADC !important; text-decoration: underline;">Visit Signalist</a>
                                 </p>
                                 <p style="margin: 0; font-size: 14px; line-height: 1.5; color: #CCDADC !important;">
@@ -1106,5 +1112,43 @@ export const INACTIVE_USER_REMINDER_EMAIL_TEMPLATE = `<!DOCTYPE html>
             </td>
         </tr>
     </table>
+</body>
+</html>`;
+
+export const DAILY_BRIEF_EMAIL_TEMPLATE = `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Signalist Daily Brief</title>
+</head>
+<body style="margin:0;padding:0;background:#050505;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;">
+  <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="background:#050505;">
+    <tr>
+      <td align="center" style="padding:32px 16px;">
+        <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="max-width:640px;background:#141414;border:1px solid #30333A;border-radius:12px;">
+          <tr>
+            <td style="padding:28px 28px 18px 28px;">
+              <img src="https://ik.imagekit.io/a6fkjou7d/logo.png?updatedAt=1756378431634" alt="Signalist Logo" width="140" style="height:auto;max-width:100%;">
+            </td>
+          </tr>
+          <tr>
+            <td style="padding:0 28px 28px 28px;">
+              <h1 style="margin:0 0 8px 0;color:#FDD458;font-size:24px;">Daily Brief</h1>
+              <p style="margin:0 0 18px 0;color:#9CA3AF;font-size:14px;">{{date}}</p>
+              <h2 style="margin:0 0 14px 0;color:#FFFFFF;font-size:18px;">{{headline}}</h2>
+              <div style="margin:0 0 18px 0;">{{briefHtml}}</div>
+              <p style="margin:18px 0 0 0;color:#CCDADC;font-size:14px;line-height:1.6;">
+                <a href="{{unsubscribeUrl}}" style="color:#CCDADC;text-decoration:underline;">Unsubscribe</a> |
+                <a href="{{preferencesUrl}}" style="color:#CCDADC;text-decoration:underline;">Manage preferences</a>
+                &nbsp;|&nbsp;
+                <a href="{{dashboardUrl}}" style="color:#CCDADC;text-decoration:underline;">Open Dashboard</a>
+              </p>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
 </body>
 </html>`;

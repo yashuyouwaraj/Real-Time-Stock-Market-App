@@ -1,10 +1,12 @@
 import {inngest} from "@/lib/inngest/client";
-import {NEWS_SUMMARY_EMAIL_PROMPT, PERSONALIZED_WELCOME_EMAIL_PROMPT} from "@/lib/inngest/prompts";
-import {sendNewsSummaryEmail, sendWelcomeEmail} from "@/lib/nodemailer";
+import {DAILY_BRIEF_PROMPT, NEWS_SUMMARY_EMAIL_PROMPT, PERSONALIZED_WELCOME_EMAIL_PROMPT} from "@/lib/inngest/prompts";
+import {sendDailyBriefEmail, sendNewsSummaryEmail, sendWelcomeEmail} from "@/lib/nodemailer";
 import {getAllUsersForNewsEmail} from "@/lib/actions/user.actions";
 import { getWatchlistSymbolsByEmail } from "@/lib/actions/watchlist.actions";
-import { getNews } from "@/lib/actions/finnhub.actions";
+import { getMarketRegimeSnapshot, getNews } from "@/lib/actions/finnhub.actions";
 import { getFormattedTodayDate } from "@/lib/utils";
+import { connectToDatabase } from "@/database/mongoose";
+import { DailyBrief } from "@/database/models/daily-brief.model";
 
 export const sendSignUpEmail = inngest.createFunction(
     { id: 'sign-up-email' },
@@ -118,3 +120,68 @@ export const sendDailyNewsSummary = inngest.createFunction(
         return { success: true, message: 'Daily news summary emails sent successfully' }
     }
 )
+
+export const sendDailyAIBrief = inngest.createFunction(
+    { id: "daily-ai-brief" },
+    [{ event: "app/send.daily.brief" }, { cron: "0 11 * * *" }],
+    async ({ step }) => {
+        const users = (await step.run("get-all-users-for-brief", getAllUsersForNewsEmail)) as User[];
+        if (!users || users.length === 0) {
+            return { success: false, message: "No users found for daily brief" };
+        }
+
+        const regime = await step.run("get-market-regime", async () => getMarketRegimeSnapshot());
+        const date = getFormattedTodayDate();
+        const dateKey = new Date().toISOString().split("T")[0];
+
+        await step.run("generate-and-send-briefs", async () => {
+            await connectToDatabase();
+
+            for (const user of users) {
+                try {
+                    const symbols = await getWatchlistSymbolsByEmail(user.email);
+                    const articles = (await getNews(symbols)).slice(0, 6);
+
+                    const prompt = DAILY_BRIEF_PROMPT
+                        .replace("{{date}}", date)
+                        .replace("{{regime}}", JSON.stringify(regime))
+                        .replace("{{symbols}}", JSON.stringify(symbols))
+                        .replace("{{newsData}}", JSON.stringify(articles, null, 2));
+
+                    const response = await step.ai.infer(`ai-brief-${user.email}`, {
+                        model: step.ai.models.gemini({ model: "gemini-2.5-flash-lite" }),
+                        body: {
+                            contents: [{ role: "user", parts: [{ text: prompt }] }],
+                        },
+                    });
+
+                    const part = response.candidates?.[0]?.content?.parts?.[0];
+                    const briefHtml =
+                        (part && "text" in part ? part.text : null) ||
+                        `<p style="margin:0 0 14px 0;font-size:15px;line-height:1.6;color:#CCDADC;">No major changes today. Keep risk controlled and focus on watchlist quality.</p>`;
+
+                    const headline = `Morning setup for ${user.name} (${String(regime.regime).replace("_", " ")})`;
+
+                    await DailyBrief.findOneAndUpdate(
+                        { userId: user.id, dateKey },
+                        {
+                            $set: {
+                                email: user.email,
+                                headline,
+                                briefHtml,
+                                regime: regime.regime,
+                            },
+                        },
+                        { upsert: true, new: true }
+                    );
+
+                    await sendDailyBriefEmail({ email: user.email, date, headline, briefHtml });
+                } catch (error) {
+                    console.error("daily-ai-brief error for", user.email, error);
+                }
+            }
+        });
+
+        return { success: true, message: "Daily AI briefs sent and stored" };
+    }
+);

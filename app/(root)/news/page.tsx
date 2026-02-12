@@ -2,10 +2,16 @@ import TradingViewWidget from "@/components/TradingViewWidget";
 import NewsFeedClient from "@/components/NewsFeedClient";
 import { TOP_STORIES_WIDGET_CONFIG } from "@/lib/constants";
 import { getGeneralNewsPage } from "@/lib/actions/finnhub.actions";
+import { getAuth } from "@/lib/better-auth/auth";
+import { headers } from "next/headers";
+import { getWatchlistSymbolsByUserId } from "@/lib/actions/watchlist.actions";
 
 export default async function NewsPage() {
   const scriptUrl = "https://s3.tradingview.com/external-embedding/embed-widget-";
   const { items, hasMore } = await getGeneralNewsPage(1, 20);
+  const auth = await getAuth();
+  const session = await auth.api.getSession({ headers: await headers() });
+  const watchlistSymbols = session?.user?.id ? await getWatchlistSymbolsByUserId(session.user.id) : [];
 
   return (
     <div className="news-page">
@@ -33,7 +39,7 @@ export default async function NewsPage() {
         />
       </section>
 
-      <NewsFeedClient initialItems={items} initialHasMore={hasMore} />
+      <NewsFeedClient initialItems={items} initialHasMore={hasMore} watchlistSymbols={watchlistSymbols} />
     </div>
   );
 }
