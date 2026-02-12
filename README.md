@@ -1,7 +1,5 @@
 ﻿# Signalist
 
-**TradingView-inspired stock intelligence dashboard for tracking markets, managing watchlists, and running actionable workflows in one place.**
-
 Signalist is a full-stack Next.js fintech application focused on practical market operations: discover symbols, monitor watchlists, screen opportunities, create alerts, track portfolio positions, follow market news, and receive AI-generated daily brief emails.
 
 ![Dashboard Overview](public/stock-market-app-ss/Dashboard.png)
