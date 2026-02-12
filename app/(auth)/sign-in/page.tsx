@@ -6,7 +6,6 @@ import InputField from "@/components/forms/InputField";
 import FooterLink from "@/components/forms/FooterLink";
 import { useRouter } from "next/navigation";
 import { signInWithEmail } from "@/lib/actions/auth.actions";
-import { success } from "better-auth";
 import { toast } from "sonner";
 
 const SignIn = () => {

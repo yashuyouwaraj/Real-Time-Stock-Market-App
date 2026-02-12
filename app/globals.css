@@ -254,31 +254,34 @@
     @apply w-full grid-cols-1 gap-6 xl:grid-cols-3 space-y-6 sm:space-y-8;
   }
   .watchlist-btn {
-    @apply bg-yellow-500 text-base hover:bg-yellow-500 text-gray-900 w-full rounded h-11 font-semibold cursor-pointer;
+    @apply inline-flex items-center justify-center gap-2 bg-yellow-400 text-sm text-gray-950 w-full rounded-xl h-10 font-semibold cursor-pointer px-4 leading-none border border-yellow-300 transition-all duration-200 hover:bg-yellow-300 disabled:cursor-not-allowed disabled:opacity-60;
   }
   .watchlist-remove {
-    @apply bg-red-500! hover:bg-red-500! text-gray-900!
+    @apply !bg-gray-700 !text-gray-100 !border-gray-500 hover:!bg-gray-600 hover:!text-white;
+  }
+  .watchlist-btn-compact {
+    @apply w-auto min-w-[118px] px-3;
   }
   .watchlist-empty-container {
-    @apply container gap-8 flex-col items-center md:mt-10 p-6 text-center;
+    @apply container flex w-full min-h-[60vh] items-center justify-center p-6 text-center;
   }
   .watchlist-empty {
-    @apply flex flex-col items-center justify-center text-center;
+    @apply flex w-full max-w-xl flex-col items-center justify-center text-center px-6 py-10;
   }
   .watchlist-star {
     @apply h-16 w-16 text-gray-500 mb-4;
   }
   .empty-title {
-    @apply text-xl font-semibold text-gray-400 mb-2;
+    @apply text-2xl font-semibold text-gray-100 mb-2;
   }
   .empty-description {
-    @apply text-gray-500 mb-6 max-w-md;
+    @apply text-gray-300 mb-6 max-w-md;
   }
   .watchlist-container {
-    @apply flex flex-col-reverse lg:grid lg:grid-cols-3 gap-8;
+    @apply w-full flex flex-col gap-8;
   }
   .watchlist {
-    @apply lg:col-span-2 space-y-8;
+    @apply w-full space-y-6;
   }
   .watchlist-alerts {
     @apply items-start gap-6 h-full flex-col w-full lg:col-span-1;
@@ -302,7 +305,7 @@
     @apply text-xl md:text-2xl font-bold text-gray-100;
   }
   .watchlist-table {
-    @apply !relative overflow-hidden !w-full bg-gray-800 border !border-gray-600 !rounded-lg;
+    @apply !relative overflow-hidden !w-full bg-gray-800/95 border !border-gray-600 !rounded-2xl shadow-[0_20px_45px_rgba(0,0,0,0.25)];
   }
   .table-header-row {
     @apply text-gray-400 font-medium bg-gray-700 border-b border-gray-600 hover:bg-gray-700;
@@ -315,6 +318,33 @@
   }
   .table-cell {
     @apply font-medium text-base
+  }
+  .watchlist-card {
+    @apply bg-gray-800 border border-gray-600 rounded-2xl shadow-[0_16px_40px_rgba(0,0,0,0.2)];
+  }
+  .watchlist-hero {
+    @apply bg-gray-800 border border-gray-600 rounded-2xl shadow-[0_16px_40px_rgba(0,0,0,0.2)] p-6 md:p-8 flex flex-col lg:flex-row gap-6 lg:items-center lg:justify-between;
+  }
+  .watchlist-metrics {
+    @apply grid grid-cols-1 sm:grid-cols-2 gap-3 min-w-[280px];
+  }
+  .watchlist-metric-card {
+    @apply rounded-xl border border-gray-600 bg-gray-700/40 px-4 py-3;
+  }
+  .watchlist-metric-label {
+    @apply text-xs uppercase tracking-[0.12em] text-gray-500;
+  }
+  .watchlist-metric-value {
+    @apply mt-1 text-2xl font-bold text-yellow-500;
+  }
+  .watchlist-metric-value-sm {
+    @apply mt-1 text-base font-semibold text-gray-200;
+  }
+  .watchlist-company-link {
+    @apply hover:text-yellow-500 transition-colors flex items-center justify-between gap-1.5 w-full min-h-[42px] px-1;
+  }
+  .watchlist-symbol-chip {
+    @apply inline-flex items-center rounded-full border border-yellow-500/35 bg-yellow-500/10 px-2.5 py-1 text-xs font-semibold tracking-[0.04em] text-yellow-500;
   }
   .add-alert {
     @apply flex text-sm items-center whitespace-nowrap gap-1.5 px-3 w-fit py-2 text-yellow-600 border border-yellow-600/20 rounded font-medium bg-transparent hover:bg-transparent cursor-pointer transition-colors;
@@ -375,6 +405,66 @@
   }
   .alert-delete-btn {
     @apply text-gray-400 rounded-full hover:bg-red-600/15 bg-transparent cursor-pointer transition-colors;
+  }
+  .news-page {
+    @apply flex min-h-screen flex-col gap-8;
+  }
+  .news-hero {
+    @apply rounded-2xl border border-gray-600 bg-gradient-to-br from-gray-800 via-gray-800 to-gray-700/70 p-6 md:p-8 flex flex-col gap-5 md:flex-row md:items-end md:justify-between;
+  }
+  .news-kicker {
+    @apply text-xs uppercase tracking-[0.18em] text-yellow-500/90 font-semibold;
+  }
+  .news-hero-title {
+    @apply mt-2 text-3xl md:text-4xl font-bold text-gray-100;
+  }
+  .news-hero-subtitle {
+    @apply mt-2 text-gray-300 max-w-2xl;
+  }
+  .news-hero-stat {
+    @apply rounded-xl border border-yellow-400/25 bg-yellow-500/10 px-4 py-3 w-fit;
+  }
+  .news-hero-stat-label {
+    @apply block text-[11px] uppercase tracking-[0.12em] text-yellow-500/85;
+  }
+  .news-hero-stat-value {
+    @apply block text-2xl font-bold text-yellow-400;
+  }
+  .news-feed-header {
+    @apply flex flex-col sm:flex-row sm:items-end sm:justify-between gap-2;
+  }
+  .news-feed-title {
+    @apply text-2xl font-semibold text-gray-100;
+  }
+  .news-feed-subtitle {
+    @apply text-sm text-gray-400;
+  }
+  .news-feed-grid {
+    @apply grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5;
+  }
+  .news-card {
+    @apply rounded-2xl border border-gray-600 bg-gray-800/90 p-5 transition-all duration-200 hover:border-yellow-500/35 hover:-translate-y-0.5 flex flex-col;
+  }
+  .news-card-top {
+    @apply flex items-center justify-between gap-3 mb-4;
+  }
+  .news-source-badge {
+    @apply inline-flex items-center rounded-full border border-teal-400/40 bg-teal-400/10 px-2.5 py-1 text-xs font-semibold text-teal-400;
+  }
+  .news-time {
+    @apply text-xs text-gray-500 inline-flex items-center gap-1;
+  }
+  .news-card-title {
+    @apply text-lg font-semibold text-gray-100 leading-snug mb-3 line-clamp-3;
+  }
+  .news-card-summary {
+    @apply text-sm md:text-base text-gray-300 leading-relaxed line-clamp-4 mb-4;
+  }
+  .news-card-cta {
+    @apply mt-auto inline-flex items-center gap-1.5 text-sm font-medium text-yellow-500 hover:text-yellow-400;
+  }
+  .news-feed-status {
+    @apply h-14 flex items-center justify-center text-sm text-gray-500 rounded-xl border border-gray-700 bg-gray-800/40;
   }
 }
 

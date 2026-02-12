@@ -9,8 +9,14 @@ export const getAllUsersForNewsEmail = async () => {
         if(!db) throw new Error('Mongoose connection not connected');
 
         const users = await db.collection('user').find(
-            { email: { $exists: true, $ne: null }},
-            { projection: { _id: 1, id: 1, email: 1, name: 1, country:1 }}
+            {
+                email: { $exists: true, $ne: null },
+                $or: [
+                    { emailNotifications: { $exists: false } },
+                    { emailNotifications: true }
+                ]
+            },
+            { projection: { _id: 1, id: 1, email: 1, name: 1, country:1, emailNotifications: 1 }}
         ).toArray();
 
         return users.filter((user) => user.email && user.name).map((user) => ({

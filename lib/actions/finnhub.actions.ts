@@ -7,6 +7,16 @@ import { cache } from 'react';
 const FINNHUB_BASE_URL = 'https://finnhub.io/api/v1';
 const NEXT_PUBLIC_FINNHUB_API_KEY = process.env.NEXT_PUBLIC_FINNHUB_API_KEY ?? '';
 
+type FinnhubProfile2 = {
+  name?: string;
+  ticker?: string;
+  exchange?: string;
+};
+
+type SearchResultWithExchange = FinnhubSearchResult & {
+  __exchange?: string;
+};
+
 async function fetchJSON<T>(url: string, revalidateSeconds?: number): Promise<T> {
   const options: RequestInit & { next?: { revalidate?: number } } = revalidateSeconds
     ? { cache: 'force-cache', next: { revalidate: revalidateSeconds } }
@@ -21,6 +31,43 @@ async function fetchJSON<T>(url: string, revalidateSeconds?: number): Promise<T>
 }
 
 export { fetchJSON };
+
+export async function getGeneralNewsPage(
+  page = 1,
+  limit = 20
+): Promise<{ items: MarketNewsArticle[]; hasMore: boolean }> {
+  const safePage = Number.isFinite(page) && page > 0 ? Math.floor(page) : 1;
+  const safeLimit = Number.isFinite(limit) && limit > 0 ? Math.min(Math.floor(limit), 50) : 20;
+
+  const token = process.env.FINNHUB_API_KEY ?? NEXT_PUBLIC_FINNHUB_API_KEY;
+  if (!token) {
+    throw new Error('FINNHUB API key is not configured');
+  }
+
+  const generalUrl = `${FINNHUB_BASE_URL}/news?category=general&token=${token}`;
+  const general = await fetchJSON<RawNewsArticle[]>(generalUrl, 300);
+
+  const offset = (safePage - 1) * safeLimit;
+  const maxPoolSize = Math.min(Math.max(offset + safeLimit + 20, 80), 200);
+
+  const seen = new Set<string>();
+  const unique: RawNewsArticle[] = [];
+
+  for (const art of general || []) {
+    if (!validateArticle(art)) continue;
+    const key = `${art.id}-${art.url}-${art.headline}`;
+    if (seen.has(key)) continue;
+    seen.add(key);
+    unique.push(art);
+    if (unique.length >= maxPoolSize) break;
+  }
+
+  const formatted = unique.map((a, idx) => formatArticle(a, false, undefined, idx));
+  const items = formatted.slice(offset, offset + safeLimit);
+  const hasMore = offset + safeLimit < formatted.length;
+
+  return { items, hasMore };
+}
 
 export async function getNews(symbols?: string[]): Promise<MarketNewsArticle[]> {
   try {
@@ -109,7 +156,7 @@ export const searchStocks = cache(async (query?: string): Promise<StockWithWatch
 
     const trimmed = typeof query === 'string' ? query.trim() : '';
 
-    let results: FinnhubSearchResult[] = [];
+    let results: SearchResultWithExchange[] = [];
 
     if (!trimmed) {
       // Fetch top 10 popular symbols' profiles
@@ -119,11 +166,11 @@ export const searchStocks = cache(async (query?: string): Promise<StockWithWatch
           try {
             const url = `${FINNHUB_BASE_URL}/stock/profile2?symbol=${encodeURIComponent(sym)}&token=${token}`;
             // Revalidate every hour
-            const profile = await fetchJSON<any>(url, 3600);
-            return { sym, profile } as { sym: string; profile: any };
+            const profile = await fetchJSON<FinnhubProfile2>(url, 3600);
+            return { sym, profile };
           } catch (e) {
             console.error('Error fetching profile2 for', sym, e);
-            return { sym, profile: null } as { sym: string; profile: any };
+            return { sym, profile: null as FinnhubProfile2 | null };
           }
         })
       );
@@ -134,23 +181,20 @@ export const searchStocks = cache(async (query?: string): Promise<StockWithWatch
           const name: string | undefined = profile?.name || profile?.ticker || undefined;
           const exchange: string | undefined = profile?.exchange || undefined;
           if (!name) return undefined;
-          const r: FinnhubSearchResult = {
+          const r: SearchResultWithExchange = {
             symbol,
             description: name,
             displaySymbol: symbol,
             type: 'Common Stock',
+            __exchange: exchange,
           };
-          // We don't include exchange in FinnhubSearchResult type, so carry via mapping later using profile
-          // To keep pipeline simple, attach exchange via closure map stage
-          // We'll reconstruct exchange when mapping to final type
-          (r as any).__exchange = exchange; // internal only
           return r;
         })
-        .filter((x): x is FinnhubSearchResult => Boolean(x));
+        .filter((x): x is SearchResultWithExchange => Boolean(x));
     } else {
       const url = `${FINNHUB_BASE_URL}/search?q=${encodeURIComponent(trimmed)}&token=${token}`;
       const data = await fetchJSON<FinnhubSearchResponse>(url, 1800);
-      results = Array.isArray(data?.result) ? data.result : [];
+      results = Array.isArray(data?.result) ? (data.result as SearchResultWithExchange[]) : [];
     }
 
     const mapped: StockWithWatchlistStatus[] = results
@@ -158,7 +202,7 @@ export const searchStocks = cache(async (query?: string): Promise<StockWithWatch
         const upper = (r.symbol || '').toUpperCase();
         const name = r.description || upper;
         const exchangeFromDisplay = (r.displaySymbol as string | undefined) || undefined;
-        const exchangeFromProfile = (r as any).__exchange as string | undefined;
+        const exchangeFromProfile = r.__exchange;
         const exchange = exchangeFromDisplay || exchangeFromProfile || 'US';
         const type = r.type || 'Stock';
         const item: StockWithWatchlistStatus = {
