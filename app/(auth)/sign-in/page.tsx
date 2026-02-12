@@ -26,10 +26,16 @@ const SignIn = () => {
   const onSubmit = async (data: SignInFormData) => {
     try {
       const result = await signInWithEmail(data);
-      if (result.success) router.push("/");
-      toast.success("Signed in successfully", {
-        description: "Welcome back to Signalist!",
-      });
+      if (result.success) {
+        router.push("/");
+        toast.success("Signed in successfully", {
+          description: "Welcome back to Signalist!",
+        });
+      } else {
+        toast.error("Sign in failed", {
+          description: "Wrong credentials",
+        });
+      }
     } catch (e) {
       console.error(e);
       toast.error("Sign in failed", {
@@ -46,7 +52,7 @@ const SignIn = () => {
         <InputField
           name="email"
           label="Email"
-          placeholder="contact@jsmastery.com"
+          placeholder="contact@stock.app"
           register={register}
           error={errors.email}
           validation={{
