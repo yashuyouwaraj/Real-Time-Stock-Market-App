@@ -228,3 +228,40 @@ EXAMPLES:
 - Barclays PLC (BARC.L) from Finnhub → {"tradingViewSymbol": "LSE:BARC", "confidence": "high", "reasoning": "Barclays trades on London Stock Exchange as BARC"}
 
 Your response must be valid JSON only. Do not include any other text.`
+
+export const DAILY_BRIEF_PROMPT = `Generate a concise HTML daily market brief for a user.
+
+INPUTS:
+- Date: {{date}}
+- Market regime: {{regime}}
+- Watchlist symbols: {{symbols}}
+- News data: {{newsData}}
+
+GOAL:
+Create a practical morning brief that is easy to scan and focused on action.
+
+FORMAT RULES:
+- Return ONLY clean HTML (no markdown, no code block)
+- Include exactly:
+  1) A short opening paragraph (1-2 sentences)
+  2) A section "Top Watchlist Signals" with 3 bullet points
+  3) A section "Risk Notes" with 2 bullet points
+  4) A final "Today's Plan" paragraph (1 sentence)
+- Keep total output under 220 words
+- Use simple, direct language
+- Mention relevant symbols when present
+
+STYLE:
+- Balanced tone, not hype
+- Explicitly tie recommendations to regime and news
+- Avoid jargon and vague claims
+
+HTML STYLES:
+- Heading:
+<h3 style="margin:0 0 12px 0;font-size:18px;color:#FDD458;">Section title</h3>
+- Paragraph:
+<p style="margin:0 0 14px 0;font-size:15px;line-height:1.6;color:#CCDADC;">text</p>
+- Bullet list:
+<ul style="margin:0 0 14px 18px;padding:0;color:#CCDADC;">
+  <li style="margin:0 0 8px 0;font-size:15px;line-height:1.6;">item</li>
+</ul>`

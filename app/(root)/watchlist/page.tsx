@@ -14,6 +14,7 @@ export default async function WatchlistPage() {
   const serialized = items.map((item) => ({
     symbol: item.symbol,
     company: item.company,
+    folderId: item.folderId,
     addedAt: item.addedAt.toISOString(),
   }));
 

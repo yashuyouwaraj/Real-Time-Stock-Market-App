@@ -43,19 +43,20 @@ export async function getWatchlistSymbolsByUserId(userId: string): Promise<strin
   }
 }
 
-export async function getWatchlistItemsByEmail(email: string): Promise<{ symbol: string; company: string; addedAt: Date }[]> {
+export async function getWatchlistItemsByEmail(email: string): Promise<{ symbol: string; company: string; folderId: string | null; addedAt: Date }[]> {
   if (!email) return [];
 
   try {
     const userId = await getUserIdByEmail(email);
     if (!userId) return [];
 
-    const items = await Watchlist.find({ userId }, { symbol: 1, company: 1, addedAt: 1 })
+    const items = await Watchlist.find({ userId }, { symbol: 1, company: 1, folderId: 1, addedAt: 1 })
       .sort({ addedAt: -1 })
       .lean();
     return items.map((i) => ({
       symbol: String(i.symbol),
       company: String(i.company),
+      folderId: i.folderId ? String(i.folderId) : null,
       addedAt: new Date(i.addedAt ?? Date.now()),
     }));
   } catch (err) {
@@ -64,17 +65,18 @@ export async function getWatchlistItemsByEmail(email: string): Promise<{ symbol:
   }
 }
 
-export async function getWatchlistItemsByUserId(userId: string): Promise<{ symbol: string; company: string; addedAt: Date }[]> {
+export async function getWatchlistItemsByUserId(userId: string): Promise<{ symbol: string; company: string; folderId: string | null; addedAt: Date }[]> {
   if (!userId) return [];
 
   try {
     await connectToDatabase();
-    const items = await Watchlist.find({ userId }, { symbol: 1, company: 1, addedAt: 1 })
+    const items = await Watchlist.find({ userId }, { symbol: 1, company: 1, folderId: 1, addedAt: 1 })
       .sort({ addedAt: -1 })
       .lean();
     return items.map((i) => ({
       symbol: String(i.symbol),
       company: String(i.company),
+      folderId: i.folderId ? String(i.folderId) : null,
       addedAt: new Date(i.addedAt ?? Date.now()),
     }));
   } catch (err) {

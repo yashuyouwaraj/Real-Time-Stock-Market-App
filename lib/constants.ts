@@ -1,7 +1,13 @@
 export const NAV_ITEMS = [
     { href: '/', label: 'Dashboard' },
+    { href: '/brief', label: 'Brief' },
     { href: '/search', label: 'Search' },
     { href: '/news', label: 'News' },
+    { href: '/alerts', label: 'Alerts' },
+    { href: '/compare', label: 'Compare' },
+    { href: '/screener', label: 'Screener' },
+    { href: '/portfolio', label: 'Portfolio' },
+    { href: '/earnings', label: 'Earnings' },
     { href: '/watchlist', label: 'Watchlist' },
 ];
 
@@ -180,7 +186,7 @@ export const SYMBOL_INFO_WIDGET_CONFIG = (symbol: string) => ({
     height: 170,
 });
 
-export const CANDLE_CHART_WIDGET_CONFIG = (symbol: string) => ({
+export const CANDLE_CHART_WIDGET_CONFIG = (symbol: string, timezone: string = 'Etc/UTC') => ({
     allow_symbol_change: false,
     calendar: false,
     details: true,
@@ -195,7 +201,7 @@ export const CANDLE_CHART_WIDGET_CONFIG = (symbol: string) => ({
     style: 1,
     symbol: symbol.toUpperCase(),
     theme: 'dark',
-    timezone: 'Etc/UTC',
+    timezone,
     backgroundColor: '#141414',
     gridColor: '#141414',
     watchlist: [],
@@ -206,7 +212,7 @@ export const CANDLE_CHART_WIDGET_CONFIG = (symbol: string) => ({
     height: 600,
 });
 
-export const BASELINE_WIDGET_CONFIG = (symbol: string) => ({
+export const BASELINE_WIDGET_CONFIG = (symbol: string, timezone: string = 'Etc/UTC') => ({
     allow_symbol_change: false,
     calendar: false,
     details: false,
@@ -221,7 +227,7 @@ export const BASELINE_WIDGET_CONFIG = (symbol: string) => ({
     style: 10,
     symbol: symbol.toUpperCase(),
     theme: 'dark',
-    timezone: 'Etc/UTC',
+    timezone,
     backgroundColor: '#141414',
     gridColor: '#141414',
     watchlist: [],
