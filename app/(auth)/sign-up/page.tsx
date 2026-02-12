@@ -38,10 +38,16 @@ const SignUp = () => {
   const onSubmit = async (data: SignUpFormData) => {
     try {
       const result = await signUpWithEmail(data);
-      if (result.success) router.push("/");
-      toast.success("Account created successfully!", {
-        description: "Welcome aboard.",
-      });
+      if (result.success) {
+        toast.success("Account created successfully!", {
+          description: "Welcome aboard.",
+        });
+        router.push("/");
+      } else {
+        toast.error("Sign up failed", {
+          description: "Failed to create an account.",
+        });
+      }
     } catch (e) {
       console.error(e);
       toast.error("Sign up failed", {
@@ -68,7 +74,7 @@ const SignUp = () => {
         <InputField
           name="email"
           label="Email"
-          placeholder="contact@jsmastery.com"
+          placeholder="contact@stock.app"
           register={register}
           error={errors.email}
           validation={{
